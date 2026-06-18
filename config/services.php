@@ -35,4 +35,24 @@ return [
         ],
     ],
 
+    'kommo' => [
+        'subdomain'     => env('KOMMO_SUBDOMAIN'),
+        'client_id'     => env('KOMMO_CLIENT_ID'),
+        'client_secret' => env('KOMMO_CLIENT_SECRET'),
+        'redirect_uri'  => env('KOMMO_REDIRECT_URI'),
+    ],
+
+    'q10' => [
+        'api_url' => env('Q10_API_URL'),
+        'api_key'  => env('Q10_API_KEY'),
+        'defaults' => [
+            'tipo_identificacion' => env('Q10_DEFAULT_TIPO_IDENTIFICACION', '1'),
+            'municipio'           => env('Q10_DEFAULT_MUNICIPIO'),
+            'barrio'              => env('Q10_DEFAULT_BARRIO'),
+            'como_se_entero'      => env('Q10_DEFAULT_COMO_SE_ENTERO', 1),
+            'medio_contacto'      => env('Q10_DEFAULT_MEDIO_CONTACTO', 1),
+            'numero_asesor'       => env('Q10_DEFAULT_NUMERO_ASESOR'),
+        ],
+    ],
+
 ];
