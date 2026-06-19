@@ -76,6 +76,8 @@ class SyncLeadToQ10Job implements ShouldQueue
         $contactoConsecutivo = $q10->registrarContacto($consecutivo, array_merge($contactData, [
             'nombres'   => $contactData['nombres'] ?? $lead['name'] ?? 'Sin nombre',
             'apellidos' => $contactData['apellidos'] ?? '',
+            'celular'   => $contactData['celular'] ?? '',
+            'email'     => $contactData['email'] ?? '',
         ]));
 
         if (!$contactoConsecutivo) {
@@ -120,7 +122,7 @@ class SyncLeadToQ10Job implements ShouldQueue
             'email'               => $contactData['email'] ?? $customFields['email'] ?? '',
             'celular'             => $contactData['celular'] ?? $customFields['phone'] ?? '',
             'telefono'            => $contactData['telefono'] ?? '',
-            'numero_identificacion' => $customFields['identificacion'] ?? '0000000000',
+            'numero_identificacion' => $customFields['identificacion'] ?? (string) $lead['id'],
             'tipo_identificacion' => $customFields['tipo_identificacion'] ?? null,
             'direccion'           => $customFields['direccion'] ?? '',
             'municipio'           => $customFields['municipio'] ?? null,

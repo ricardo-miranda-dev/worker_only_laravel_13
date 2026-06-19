@@ -73,18 +73,74 @@ class Q10Service
             'Numero_identificacion_asesor'           => $data['asesor'] ?? $defaults['numero_asesor'],
             'Consecutivo_como_se_entero'             => (int) ($data['como_se_entero'] ?? $defaults['como_se_entero']),
             'Consecutivo_medio_contacto'             => (int) ($data['medio_contacto'] ?? $defaults['medio_contacto']),
-            'Campos_personalizados'                  => $data['campos_personalizados'] ?? [],
+            'Campos_personalizados'                  => $this->buildCamposPersonalizados($data),
         ];
     }
 
     private function buildContactoPayload(int $consecutivoOportunidad, array $data): array
     {
+        $detalle = [];
+
+        if (!empty($data['celular'])) {
+            $detalle[] = [
+                'Tipo_detalle' => 'Celular',
+                'Descripcion'  => $this->formatCelular($data['celular']),
+            ];
+        }
+
+        if (!empty($data['email'])) {
+            $detalle[] = [
+                'Tipo_detalle' => 'Email',
+                'Descripcion'  => $data['email'],
+            ];
+        }
+
+        if (empty($detalle)) {
+            $detalle = $this->defaultDetalle();
+        }
+
         return [
             'Consecutivo_oportunidad' => $consecutivoOportunidad,
             'Nombres'                 => $data['nombres'] ?? '',
             'Apellidos'               => $data['apellidos'] ?? '',
-            'Detalle'                 => $data['detalle'] ?? [],
+            'Detalle'                 => $detalle,
             'Campos_personalizados'   => $data['campos_personalizados'] ?? [],
+        ];
+    }
+
+    private function defaultDetalle(): array
+    {
+        return [
+            [
+                'Tipo_detalle' => 'Celular',
+                'Descripcion'  => 'Sin información',
+            ],
+        ];
+    }
+    
+    private function formatCelular(string $celular): string
+    {
+        // Quitar +, espacios y guiones
+        $clean = preg_replace('/[\s\-\+]/', '', $celular);
+        
+        // Si empieza con 593 (Ecuador), quitarlo y dejar el número local
+        if (str_starts_with($clean, '593')) {
+            $clean = '0' . substr($clean, 3);
+        }
+        
+        // Máximo 12 caracteres
+        return substr($clean, 0, 12);
+    }
+
+    private function buildCamposPersonalizados(array $data): array
+    {
+        $campos = config('services.q10.campos_personalizados');
+
+        return [
+            [
+                'Consecutivo_campo_personalizado'  => $campos['rango_edad']['id'],
+                'Respuesta_campo_personalizado'    => $data['rango_edad'] ?? $campos['rango_edad']['default'],
+            ],
         ];
     }
 }

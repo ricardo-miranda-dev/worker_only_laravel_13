@@ -48,6 +48,21 @@ services:
       - "5432:5432"
     networks:
       - worker_network
+  
+  # PGAdmin4
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: worker_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "rmiranda@datafact.com.ec"
+      PGADMIN_DEFAULT_PASSWORD: "1q2w3e4r5tDataFact"
+    ports:
+      - "8081:80" # Tu Ubuntu en 8081 -> pgAdmin interno en 80
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - worker_network
 
   # ─── Redis (Queues) ───────────────────────────────────────────────
   redis:

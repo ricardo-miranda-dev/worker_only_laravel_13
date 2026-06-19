@@ -53,6 +53,12 @@ return [
             'medio_contacto'      => env('Q10_DEFAULT_MEDIO_CONTACTO', 1),
             'numero_asesor'       => env('Q10_DEFAULT_NUMERO_ASESOR'),
         ],
+        'campos_personalizados' => [
+            'rango_edad' => [
+                'id'      => env('Q10_CAMPO_RANGO_EDAD_ID', 1),
+                'default' => env('Q10_CAMPO_RANGO_EDAD_DEFAULT', '25-35'),
+            ],
+        ],
     ],
 
 ];
